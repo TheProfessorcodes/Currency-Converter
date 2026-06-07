@@ -42,8 +42,14 @@ public class CurrencyService {
 
             Map<String, Object> data = (Map<String, Object>) response.get("data");
 
-            double exchangeRate = Double.parseDouble(data.get(toCurrency.toUpperCase()).toString());
+            double rateFromBaseUSD = Double.parseDouble(data.get(fromCurrency.toUpperCase()).toString());
+            double rateToBaseUSD = Double.parseDouble(data.get(toCurrency.toUpperCase()).toString());
+
+
+            double exchangeRate = rateToBaseUSD / rateFromBaseUSD;
             double finalResult = units * exchangeRate;
+
+            log.info("Cross-rate calculated successfully. 1 {} = {} {}", fromCurrency, exchangeRate, toCurrency);
             log.info("Successfully fetched market rates. Conversion factor: {}", exchangeRate);
 
             ConversionAudit auditRecord = new ConversionAudit();
